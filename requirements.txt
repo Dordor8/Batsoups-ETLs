@@ -172,5 +172,3 @@ websockets==16.0
 whenever==0.8.10
 xmltodict==0.14.2
 zipp==3.23.0
-
-kafka-python
