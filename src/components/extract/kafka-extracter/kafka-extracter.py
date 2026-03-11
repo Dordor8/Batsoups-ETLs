@@ -18,6 +18,7 @@ def extract():
     with open(output_file, "w") as file:
         file.write(str(message))
 
+    consumer.commit()
 
 if __name__ == "__main__":
     extract()
