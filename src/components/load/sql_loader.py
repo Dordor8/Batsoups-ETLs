@@ -3,7 +3,8 @@ import os.path
 
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
+from jsonschema2ddl import JSONSchemaToDatabase
+from sqlalchemy import create_engine, inspect
 
 
 def file_format(file_name, path):
@@ -36,6 +37,22 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
 
     engine = define_engine(table_name)
     conn = engine.raw_connection()
+    inspector = inspect(engine)
+    if table_name in inspector.get_table_names():
+        raise Exception("table already exists: ", table_name)
+
+    translator = JSONSchemaToDatabase(
+        schema_from_api,
+        root_table_name=table_name,
+    )
+
+    translator.create_tables(conn)
+    translator.create_links(conn)
+    translator.analyze(conn)
+
+    conn.comit()
+
+    df.to_sql(table_name, engine, if_exists='append', index=False)
 
 
 def main():
