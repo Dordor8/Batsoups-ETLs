@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from jsonschema2ddl import JSONSchemaToDatabase
 from sqlalchemy import create_engine, inspect
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def file_format(file_name, path):
     if file_name.endswith(".csv"):
