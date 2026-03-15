@@ -2,6 +2,8 @@ import json
 import os.path
 
 import pandas as pd
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 
 def file_format(file_name, path):
@@ -16,9 +18,24 @@ def file_format(file_name, path):
     return df
 
 
+def define_engine(table_name):
+    load_dotenv("./.env")
+    user = os.getenv('USER')
+    password = os.getenv('PASSWORD')
+    host = os.getenv('HOST')
+    database = table_name
+    engine = create_engine(
+        'postgresql+psycopg2://{0}:{1}@{2}/{3}'.
+        format(user, password, host, database))
+    return engine
+
+
 def load_to_sql(folder, file_name, table_name, schema_from_api):
     file_path = os.path.join(folder, file_name)
     df = file_format(file_name, file_path)
+
+    engine = define_engine(table_name)
+    conn = engine.raw_connection()
 
 
 def main():
