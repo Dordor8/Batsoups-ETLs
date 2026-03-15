@@ -25,7 +25,7 @@ def file_format(file_name, path):
 
 
 def define_engine(table_name):
-    load_dotenv("../.env")
+    load_dotenv(".env")
     user = os.getenv('USER')
     password = os.getenv('PASSWORD')
     host = os.getenv('HOST')
