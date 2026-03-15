@@ -22,4 +22,13 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
 
 
 def main():
-    ...
+    folder = os.getenv("FOLDER")
+    file_name = os.getenv("FILE_NAME")
+    table_name = os.getenv("TABLE_NAME")
+    schema = json.loads(os.getenv("SCHEMA"))
+
+    load_to_sql(folder, file_name, table_name, schema)
+
+
+if __name__ == "__main__":
+    main()
