@@ -1,4 +1,5 @@
 import json
+import logging
 import os.path
 
 import pandas as pd
@@ -10,10 +11,12 @@ from sqlalchemy import create_engine, inspect
 def file_format(file_name, path):
     if file_name.endswith(".csv"):
         df = pd.read_csv(path)
+        logging.info(f"csv file is loaded- {file_name}")
     elif file_name.endswith('.json'):
         with open(path, "r", encoding="utf-8") as jsonfile:
             data = json.load(jsonfile)
         df = pd.json_normalize(data)
+        logging.info(f"json file is loaded- {file_name}")
     else:
         raise Exception("the formats are csv and json")
     return df
@@ -41,6 +44,7 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
     if table_name in inspector.get_table_names():
         raise Exception("table already exists: ", table_name)
 
+    logging.info(f"creating table {table_name} from the given schema")
     translator = JSONSchemaToDatabase(
         schema_from_api,
         root_table_name=table_name,
@@ -49,10 +53,12 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
     translator.create_tables(conn)
     translator.create_links(conn)
     translator.analyze(conn)
-
-    conn.comit()
+    conn.commit()
+    conn.close()
+    logging.info(f"{table_name} created successfully")
 
     df.to_sql(table_name, engine, if_exists='append', index=False)
+    logging.info(f"data inserted to {table_name}")
 
 
 def main():
