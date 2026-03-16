@@ -10,16 +10,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 
 def file_format(file_name, path):
-    if file_name.endswith(".csv"):
-        df = pd.read_csv(path)
-        logging.info(f"csv file is loaded- {file_name}")
-    elif file_name.endswith('.json'):
+    if file_name.endswith(".json"):
         with open(path, "r", encoding="utf-8") as jsonfile:
             data = json.load(jsonfile)
         df = pd.json_normalize(data)
         logging.info(f"json file is loaded- {file_name}")
     else:
-        raise Exception("the formats are csv and json")
+        raise Exception("the format must be json")
     return df
 
 
