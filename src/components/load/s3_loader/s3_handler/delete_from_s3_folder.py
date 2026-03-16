@@ -28,5 +28,4 @@ def delete_from_s3_folder(prefix: str):
     return True
 
 
-if __name__ == "__main__":
-    delete_from_s3_folder("group2/json-files/")
+
