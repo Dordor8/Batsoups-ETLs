@@ -4,9 +4,20 @@ import os
 
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, String, MetaData, Column, Table, inspect
+from sqlalchemy import create_engine, String, Integer, Float, Boolean, Date, DateTime, Text, MetaData, Column, Table, \
+    inspect
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+TYPE_MAPPING = {
+    "integer": Integer,
+    "string": String,
+    "float": Float,
+    "boolean": Boolean,
+    "date": Date,
+    "datetime": DateTime,
+    "text": Text,
+}
 
 
 def file_format(file_name, path):
@@ -35,7 +46,7 @@ def create_table_from_schema(engine, table_name, schema):
     metadata = MetaData()
     columns = []
     for column_name, column_details in schema['properties'].items():
-        column_type = column_details.get("type", String)
+        column_type = TYPE_MAPPING.get(column_details.get("type"), String)
         is_pk = column_details.get('primary_key', False)
         new_column = Column(column_name, column_type, primary_key=is_pk)
         columns.append(new_column)

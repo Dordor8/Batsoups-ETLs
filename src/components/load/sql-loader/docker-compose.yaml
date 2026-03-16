@@ -12,6 +12,12 @@ services:
       - "5432:5432"
     networks:
       - dem
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   pgadmin:
     image: dpage/pgadmin4:latest
     restart: always
@@ -23,14 +29,18 @@ services:
       - "5005:80"
     depends_on:
       - postgres
+    networks:
+      - dem
+
   load_service:
     build: .
     image: sql-loader-load-service:latest
     env_file:
       - .env
     volumes:
-      - ./file_test.csv:/app/file_test.csv
+      - ./file_test.json:/app/file_test.csv
     networks:
       - dem
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
