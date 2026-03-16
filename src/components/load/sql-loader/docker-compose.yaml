@@ -38,7 +38,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./file_test.json:/app/file_test.csv
+      - ./file_test.json:/app/file_test.json
     networks:
       - dem
     depends_on:

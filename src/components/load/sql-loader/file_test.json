@@ -1,0 +1,4 @@
+[
+  {"id": 1, "name": "Shirel", "phone": "0523344551", "covid_test": false},
+  {"id": 2, "name": "talia", "phone": "0524433551", "covid_test": true}
+]
