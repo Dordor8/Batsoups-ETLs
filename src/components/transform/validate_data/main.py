@@ -17,7 +17,7 @@ group_name = os.getenv("GROUP_NAME")
 bucket_name = os.getenv("BUCKET_NAME")
 
 schema_as_dict = json.loads(schema)
-bdt = schema_as_dict["bdt"]
+bdt = schema_as_dict["BDT"]
 
 region = "IL"
 
@@ -44,8 +44,10 @@ def write_to_s3(source_path: str, prefix: str):
                 for file in files:
                     file_path = os.path.join(root, file)
                     relative_path = os.path.relpath(file_path, source_path)
-                    with open(file_path, 'rb') as file_data:
-                        s3.upload_file(file_data, bucket_name, relative_path)
+                    s3.Bucket(bucket_name).upload_file(
+                        file_path,
+                        group_name + prefix + relative_path
+                    )
                     print(f'File {file_path} uploaded to S3 bucket {bucket_name}')
         else:
             print(f'Invalid source path: {source_path}')
