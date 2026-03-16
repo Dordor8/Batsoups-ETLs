@@ -42,14 +42,9 @@ def notify_positive_covid_test(df, phone_as_string, covid_test_as_string):
 
 
 def extract_bdt(schema):
-    bdt = schema.get("bdt", {})
-    phone = None
-    covid_test = None
-    for col, meaning in bdt.items():
-        if meaning == "phone_number":
-            phone = col
-        if meaning == "covid_test_result":
-            covid_test = col
+    bdt = schema.get("BDT", {})
+    phone = bdt.get("phone_number")
+    covid_test = bdt.get("covid_test_result")
     return phone, covid_test
 
 
