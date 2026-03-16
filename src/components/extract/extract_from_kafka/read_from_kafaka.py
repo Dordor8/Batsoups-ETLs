@@ -15,7 +15,7 @@ inactive_time_ms = os.getenv("INACTIVE_TIME")
 consumer = KafkaConsumer(topic,
                          bootstrap_servers=bootstrap_servers.split(','),
                          group_id=group_id,
-                         consumer_timeout_ms=10000000)
+                         consumer_timeout_ms=inactive_time_ms)
 
 
 def csv_to_dict(message):
