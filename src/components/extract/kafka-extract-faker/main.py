@@ -5,7 +5,7 @@ import uuid
 
 from faker import Faker
 
-output_folder = os.getenv("OUTPUT_FOLDER")
+output_folder = "tmp/output/"#os.getenv("OUTPUT_FOLDER")
 fake = Faker()
 
 ids = [331075960, 216596315]
@@ -49,7 +49,7 @@ def extract(max_messages=1):
 
     filename = f"file_{uuid.uuid4()}.json"
     output_path = os.path.join(output_folder, filename)
-    os.makedirs(output_path, exist_ok=True)
+    os.makedirs(output_folder, exist_ok=True)
     with open(output_path, "w") as file:
         json.dump(result, file)
 
