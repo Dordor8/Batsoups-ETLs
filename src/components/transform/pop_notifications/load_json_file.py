@@ -46,9 +46,9 @@ def extract_bdt(schema):
     phone = None
     covid_test = None
     for col, meaning in bdt.items():
-        if meaning == "PHONE":
+        if meaning == "phone_number":
             phone = col
-        if meaning == "COVID_TEST":
+        if meaning == "covid_test_result":
             covid_test = col
     return phone, covid_test
 
