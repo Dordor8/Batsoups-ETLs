@@ -1,9 +1,0 @@
-{
-  "type": "object",
-  "properties": {
-    "id": {"type": "integer"},
-    "name": {"type": "string"},
-    "phone": {"type": "integer"},
-    "covid_test": {"type": "string"}
-  }
-}

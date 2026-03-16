@@ -25,7 +25,12 @@ services:
       - postgres
   load_service:
     build: .
+    image: sql-loader-load-service:latest
     env_file:
       - .env
     volumes:
-      -
+      - ./file_test.csv:/app/file_test.csv
+    networks:
+      - dem
+    depends_on:
+      - postgres

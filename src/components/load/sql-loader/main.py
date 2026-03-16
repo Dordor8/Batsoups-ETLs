@@ -4,8 +4,7 @@ import os.path
 
 import pandas as pd
 from dotenv import load_dotenv
-from jsonschema2ddl import JSONSchemaToDatabase
-from sqlalchemy import create_engine, inspect
+from sqlalchemy import create_engine, String, MetaData, Column, Table, inspect
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -24,39 +23,40 @@ def file_format(file_name, path):
     return df
 
 
-def define_engine(table_name):
-    load_dotenv(".env")
+def define_engine():
     user = os.getenv('USER')
     password = os.getenv('PASSWORD')
     host = os.getenv('HOST')
-    database = table_name
+    database = os.getenv('DATABASE')
     engine = create_engine(
         'postgresql+psycopg2://{0}:{1}@{2}/{3}'.
         format(user, password, host, database))
     return engine
 
 
+def create_table_from_schema(engine, table_name, schema):
+    metadata = MetaData()
+    columns = []
+    for column_name, column_details in schema['properties'].items():
+        column_type = column_details.get("type", String)
+        is_pk = column_details.get('primary_key', False)
+        new_column = Column(column_name, column_type, primary_key=is_pk)
+        columns.append(new_column)
+    Table(table_name, metadata, *columns)
+    metadata.create_all(engine)
+    logging.info(f"creating table {table_name} from the given schema")
+
+
 def load_to_sql(folder, file_name, table_name, schema_from_api):
     file_path = os.path.join(folder, file_name)
     df = file_format(file_name, file_path)
 
-    engine = define_engine(table_name)
-    conn = engine.raw_connection()
+    engine = define_engine()
     inspector = inspect(engine)
     if table_name in inspector.get_table_names():
         raise Exception("table already exists: ", table_name)
 
-    logging.info(f"creating table {table_name} from the given schema")
-    translator = JSONSchemaToDatabase(
-        schema_from_api,
-        root_table_name=table_name,
-    )
-
-    translator.create_tables(conn)
-    translator.create_links(conn)
-    translator.analyze(conn)
-    conn.commit()
-    conn.close()
+    create_table_from_schema(engine, table_name, schema_from_api)
     logging.info(f"{table_name} created successfully")
 
     df.to_sql(table_name, engine, if_exists='append', index=False)
@@ -64,11 +64,11 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
 
 
 def main():
+    load_dotenv(".env")
     folder = os.getenv("FOLDER")
     file_name = os.getenv("FILE_NAME")
     table_name = os.getenv("TABLE_NAME")
     schema = json.loads(os.getenv("SCHEMA"))
-
     load_to_sql(folder, file_name, table_name, schema)
 
 
