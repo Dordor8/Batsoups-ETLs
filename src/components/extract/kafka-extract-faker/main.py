@@ -5,7 +5,7 @@ import uuid
 
 from faker import Faker
 
-output_folder = "tmp/output/"#os.getenv("OUTPUT_FOLDER")
+output_folder = os.getenv("OUTPUT_FOLDER")
 fake = Faker()
 
 ids = [331075960, 216596315]
