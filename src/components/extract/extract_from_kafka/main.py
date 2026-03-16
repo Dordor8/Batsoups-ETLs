@@ -3,15 +3,15 @@ import json
 import os
 import uuid
 
-from dotenv import load_dotenv
 from kafka import KafkaConsumer
 
-load_dotenv()
 output_folder = os.getenv("OUTPUT_FOLDER")
 topic = os.getenv("TOPIC")
 bootstrap_servers = os.getenv("BOOTSTRAP_SERVERS")
 group_id = os.getenv("GROUP_ID")
-inactive_time_ms = os.getenv("INACTIVE_TIME")
+messages_amount = os.getenv("MESSAGES_AMOUNT")
+inactive_time_ms = 1000
+
 consumer = KafkaConsumer(topic,
                          bootstrap_servers=bootstrap_servers.split(','),
                          group_id=group_id,
@@ -54,4 +54,4 @@ def extract(max_messages=1):
 
 
 if __name__ == "__main__":
-    extract()
+    extract(int(messages_amount))
