@@ -9,7 +9,7 @@ folder_path = os.getenv("INPUT_FOLDER")
 parquet_s3_prefix = os.getenv("S3_PREFIX")
 
 def write_to_s3(source_path: str, prefix: str):
-    print(f"Writing to key: {bucket_name + group_name + prefix}")
+    print(f"Writing to key: {bucket_name + '/' + group_name + '/' + prefix}")
 
     try:
         s3 = boto3.resource(
@@ -20,7 +20,7 @@ def write_to_s3(source_path: str, prefix: str):
         if os.path.isfile(source_path):
             file_name = os.path.basename(source_path)
             with open(source_path, 'rb') as data:
-                s3.Bucket(bucket_name).put_object(Key=group_name + prefix + file_name, Body=data)
+                s3.Bucket(bucket_name).put_object(Key=group_name + '/' + prefix + file_name, Body=data)
             print(f'File {source_path} uploaded to S3 bucket {bucket_name}')
 
         elif os.path.isdir(source_path):
