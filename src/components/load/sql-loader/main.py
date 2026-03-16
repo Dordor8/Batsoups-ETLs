@@ -44,9 +44,19 @@ def create_table_from_schema(engine, table_name, schema):
     logging.info(f"creating table {table_name} from the given schema")
 
 
-def load_to_sql(folder, file_name, table_name, schema_from_api):
+def load_to_sql(folder, file_name, table_name, engine):
     file_path = os.path.join(folder, file_name)
     df = file_format(file_name, file_path)
+    df.to_sql(table_name, engine, if_exists='append', index=False)
+    logging.info(f"data from {file_name} inserted to {table_name}")
+
+
+def main():
+    load_dotenv(".env")
+    folder = os.getenv("FOLDER")
+    file_name = os.getenv("FILE_NAME")
+    table_name = os.getenv("TABLE_NAME")
+    schema_from_api = json.loads(os.getenv("SCHEMA"))
 
     engine = define_engine()
     inspector = inspect(engine)
@@ -56,17 +66,7 @@ def load_to_sql(folder, file_name, table_name, schema_from_api):
     create_table_from_schema(engine, table_name, schema_from_api)
     logging.info(f"{table_name} created successfully")
 
-    df.to_sql(table_name, engine, if_exists='append', index=False)
-    logging.info(f"data inserted to {table_name}")
-
-
-def main():
-    load_dotenv(".env")
-    folder = os.getenv("FOLDER")
-    file_name = os.getenv("FILE_NAME")
-    table_name = os.getenv("TABLE_NAME")
-    schema = json.loads(os.getenv("SCHEMA"))
-    load_to_sql(folder, file_name, table_name, schema)
+    load_to_sql(folder, file_name, table_name, schema_from_api)
 
 
 if __name__ == "__main__":
