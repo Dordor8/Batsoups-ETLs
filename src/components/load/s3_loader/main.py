@@ -1,14 +1,12 @@
 import os
 import boto3
-from dotenv import load_dotenv
 
-load_dotenv()
-
-aws_access_key_id = os.getenv("aws_access_key_id")
-aws_secret_access_key = os.getenv("aws_secret_access_key")
-group_name = os.getenv("group_name")
-bucket_name = os.getenv("bucket_name")
-
+aws_access_key_id = os.getenv("ACCESS_KEY")
+aws_secret_access_key = os.getenv("SECRET_ACCESS")
+group_name = os.getenv("GROUP_NAME")
+bucket_name = os.getenv("BUCKET_NAME")
+folder_path = os.getenv("INPUT_FOLDER")
+parquet_s3_prefix = os.getenv("S3_PREFIX")
 
 def write_to_s3(source_path: str, prefix: str):
     print(f"Writing to key: {bucket_name + group_name + prefix}")
@@ -43,3 +41,10 @@ def write_to_s3(source_path: str, prefix: str):
     except Exception as e:
         print(f'Error uploading files to S3 bucket {bucket_name}: {e}')
         return False
+
+def write_parquet_to_s3():
+    write_to_s3(folder_path, parquet_s3_prefix)
+
+
+if __name__ == "__main__":
+    write_parquet_to_s3()
