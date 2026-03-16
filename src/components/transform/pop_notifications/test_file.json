@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "shirelll",
+    "phone": "0541112233",
+    "result": true
+  },
+  {
+    "id": 2,
+    "name": "maayan",
+    "phone": "0541112553",
+    "result": true
+  },
+  {
+    "id": 3,
+    "name": "talia",
+    "phone": "0506667778",
+    "result": true
+  }
+]
