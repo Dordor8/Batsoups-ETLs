@@ -3,7 +3,6 @@ import logging
 import os
 
 import pandas as pd
-from dotenv import load_dotenv
 from sqlalchemy import create_engine, String, Integer, Float, Boolean, Date, DateTime, Text, MetaData, Column, Table, \
     inspect
 
@@ -63,8 +62,7 @@ def load_to_sql(folder, file_name, table_name, engine):
 
 
 def main():
-    load_dotenv(".env")
-    folder = os.getenv("FOLDER")
+    folder = os.getenv("INPUT_FOLDER")
     table_name = os.getenv("TABLE_NAME")
     schema_from_api = json.loads(os.getenv("SCHEMA"))
 
