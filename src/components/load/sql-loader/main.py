@@ -1,6 +1,6 @@
 import json
 import logging
-import os.path
+import os
 
 import pandas as pd
 from dotenv import load_dotenv
@@ -54,7 +54,6 @@ def load_to_sql(folder, file_name, table_name, engine):
 def main():
     load_dotenv(".env")
     folder = os.getenv("FOLDER")
-    file_name = os.getenv("FILE_NAME")
     table_name = os.getenv("TABLE_NAME")
     schema_from_api = json.loads(os.getenv("SCHEMA"))
 
@@ -66,7 +65,9 @@ def main():
     create_table_from_schema(engine, table_name, schema_from_api)
     logging.info(f"{table_name} created successfully")
 
-    load_to_sql(folder, file_name, table_name, schema_from_api)
+    for file_name in os.listdir(folder):
+        if file_name.endswith(".json"):
+            load_to_sql(folder, file_name, table_name, engine)
 
 
 if __name__ == "__main__":
