@@ -53,5 +53,5 @@ def extract(max_messages=1):
         json.dump(result, file)
 
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     extract()
