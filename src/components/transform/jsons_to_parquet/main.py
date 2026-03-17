@@ -14,7 +14,7 @@ config = {
 max_size = config["maximal_size"]
 min_size = config["minimal_size"]
 
-output_path = os.getenv("OUTPUT_PATH")
+output_path = os.getenv("OUTPUT_FOLDER")
 input_path = os.getenv("INPUT_FOLDER")
 
 
@@ -42,8 +42,8 @@ def _convert_jsons_to_parquet():
         tables.append(pa_json.read_json(json_file))
     merged_tables = pa.concat_tables(tables)
     parquet_file = f"{uuid.uuid4()}.parquet"
-    full_path = os.path.join(output_path, parquet_file)
     os.makedirs(output_path, exist_ok=True)
+    full_path = os.path.join(output_path, parquet_file)
     with open(full_path, 'wb') as f:
         pa_parquet.write_table(merged_tables, f)
 
