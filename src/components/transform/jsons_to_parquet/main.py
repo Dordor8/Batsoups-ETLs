@@ -43,6 +43,7 @@ def _convert_jsons_to_parquet():
     merged_tables = pa.concat_tables(tables)
     parquet_file = f"{uuid.uuid4()}.parquet"
     full_path = os.path.join(output_path, parquet_file)
+    os.makedirs(output_path, exist_ok=True)
     with open(full_path, 'wb') as f:
         pa_parquet.write_table(merged_tables, f)
 
