@@ -121,6 +121,7 @@ def validate_bdt():
             else:
                 print("validated")
                 validated_path = os.path.join(validated_jsons_folder_path, f"validated_{uuid.uuid4()}.json")
+                os.makedirs(validated_path, exist_ok=True)
                 with open(validated_path, "w") as f:
                     json.dump(single_json, f)
 
