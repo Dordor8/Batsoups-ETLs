@@ -30,7 +30,7 @@ def write_to_s3(source_path: str, prefix: str):
                     relative_path = os.path.relpath(file_path, source_path)
                     s3.Bucket(bucket_name).upload_file(
                         file_path,
-                        group_name + prefix + relative_path
+                        group_name + '/' + prefix + relative_path
                     )
                     print(f'File {file_path} uploaded to S3 bucket {bucket_name}')
         else:
